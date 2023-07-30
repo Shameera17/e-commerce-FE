@@ -45,7 +45,6 @@ const SignUp: React.FC = () => {
   const [register, { isLoading }] = useRegisterMutation();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     try {
       const res: any = await register(data).unwrap();
       // Save the token in localStorage

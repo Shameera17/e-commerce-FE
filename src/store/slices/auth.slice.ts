@@ -4,6 +4,7 @@ type IUserInfo = {
   _id: string;
   name: string;
   email: string;
+  role: "seller" | "buyer";
 };
 interface IAuthReducer {
   userInfo: IUserInfo | null;

@@ -89,14 +89,14 @@ export default function MenuAppBar() {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate("/profile");
+                    navigate(`${userInfo.role}/profile`);
                     setAnchorEl(null);
                   }}
                 >
                   <ListItemIcon>
                     <Login fontSize="small" />
                   </ListItemIcon>
-                  profile
+                  Dashbord
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
