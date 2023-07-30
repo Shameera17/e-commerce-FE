@@ -1,17 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const localStorageData = localStorage.getItem("userInfo");
 type IUserInfo = {
   _id: string;
   name: string;
   email: string;
 };
-interface InitialState {
+interface IAuthReducer {
   userInfo: IUserInfo | null;
+  token: null | string;
 }
 
-const initialState: InitialState = {
-  userInfo: localStorageData ? JSON.parse(localStorageData) : null,
+const initialState: IAuthReducer = {
+  userInfo: null,
+  token: null,
 };
 const authSlice = createSlice({
   name: "auth",
@@ -19,13 +20,20 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action: PayloadAction<IUserInfo>) => {
       state.userInfo = action.payload;
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
-    signout: (state, action: PayloadAction<null>) => {
+    signout: (state) => {
       state.userInfo = null;
       localStorage.removeItem("userInfo");
     },
+    setToken(state, action: PayloadAction<{ token: string }>) {
+      localStorage.setItem("token", action.payload.token);
+      state.token = action.payload.token;
+    },
+    clearToken(state) {
+      state.token = null;
+    },
   },
 });
-export const { setCredentials, signout } = authSlice.actions;
+export const { setCredentials, signout, setToken, clearToken } =
+  authSlice.actions;
 export default authSlice.reducer;

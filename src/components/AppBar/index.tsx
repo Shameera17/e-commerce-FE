@@ -17,10 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { RootState } from "../../store/configureStore";
-import { signout } from "../../store/slices/auth.slice";
+import { clearToken, signout } from "../../store/slices/auth.slice";
 
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -102,7 +101,12 @@ export default function MenuAppBar() {
                 <MenuItem
                   onClick={() => {
                     setAnchorEl(null);
-                    dispatch(signout(null));
+
+                    dispatch(signout());
+                    // Clear the token from Redux and localStorage
+                    dispatch(clearToken());
+                    localStorage.removeItem("token");
+
                     navigate("/");
                   }}
                 >

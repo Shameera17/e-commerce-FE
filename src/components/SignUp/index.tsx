@@ -1,32 +1,75 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+// Replace with your actual image URL
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 import SignUpImage from "../../images/signup.jpg";
-// Replace with your actual image URL
+import { RootState } from "../../store/configureStore";
+import { setCredentials, setToken } from "../../store/slices/auth.slice";
+import { useRegisterMutation } from "../../store/slices/usersApi.slice";
 import { FormSchema } from "./FormSchema";
 import "./styles.css";
 
 // Import the CSS file for styling (see below)
 
 const SignUp: React.FC = () => {
-  const { control, handleSubmit, trigger } = useForm({
+  const { userInfo } = useSelector((state: RootState) => state.auth);
+  const { control, handleSubmit, getValues, trigger } = useForm({
     resolver: yupResolver(FormSchema),
     mode: "all",
     defaultValues: {
+      role: "buyer",
       name: "",
       email: "",
       password: "",
       confPassword: "",
     },
   });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = (data: any) => {
-    console.log("formData", data.errors);
+  const [register, { isLoading }] = useRegisterMutation();
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    try {
+      const res: any = await register(data).unwrap();
+      // Save the token in localStorage
+      dispatch(setCredentials({ ...res.data }));
+      // Save the token in Redux
+      dispatch(setToken({ token: res.token }));
+
+      navigate("/");
+    } catch (err: any) {
+      enqueueSnackbar(err?.data?.message || err?.error || err, {
+        variant: "warning",
+        anchorOrigin: {
+          horizontal: "right",
+          vertical: "top",
+        },
+      });
+      console.log(err?.data.message || err.error || err);
+    }
   };
+
+  useEffect(() => {
+    // navigate to home screen, when user sign in
+    if (userInfo) navigate("/");
+  }, [navigate, userInfo]);
   return (
     <div className="signup-container">
       <div className="signup-image">
@@ -69,7 +112,6 @@ const SignUp: React.FC = () => {
               );
             }}
           />
-
           <Controller
             name={"password"}
             control={control}
@@ -100,8 +142,40 @@ const SignUp: React.FC = () => {
               );
             }}
           />
-          <Button type="submit" variant="contained">
-            Sign Up
+          <Typography component="p">Sign up as: </Typography>{" "}
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup placeholder="Sign up as: " {...field} row>
+                <FormControlLabel
+                  value="buyer"
+                  control={<Radio />}
+                  label="Buyer"
+                />
+                <FormControlLabel
+                  value="seller"
+                  control={<Radio />}
+                  label="Seller"
+                />
+              </RadioGroup>
+            )}
+          />
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const validated = await trigger();
+              if (!validated) {
+                const values = getValues();
+                onSubmit(values!);
+              }
+            }}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              `Sign Up`
+            )}
           </Button>
           <div
             style={{

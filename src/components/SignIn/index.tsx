@@ -16,7 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import SignInImage from "../../images/login.jpg";
-import { setCredentials } from "../../store/slices/auth.slice";
+import { RootState } from "../../store/configureStore";
+import { setCredentials, setToken } from "../../store/slices/auth.slice";
 import { useLoginMutation } from "../../store/slices/usersApi.slice";
 import { FormSchema } from "./FormSchema";
 import "./styles.css";
@@ -34,7 +35,7 @@ const SignIn = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [login, { isLoading }] = useLoginMutation();
   // if user info available, then user has already logged in
-  const { userInfo } = useSelector((state: any) => state.auth);
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     // navigate to home screen, when user sign in
@@ -43,11 +44,15 @@ const SignIn = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const res = await login(data).unwrap();
+      const res: any = await login(data).unwrap();
+      // Save the token in localStorage
       dispatch(setCredentials({ ...res.data }));
+      // Save the token in Redux
+      dispatch(setToken({ token: res.token }));
+
       navigate("/");
     } catch (err: any) {
-      enqueueSnackbar(err?.data.message || err.error, {
+      enqueueSnackbar(err?.data?.message || err?.error || err, {
         variant: "warning",
         anchorOrigin: {
           horizontal: "right",

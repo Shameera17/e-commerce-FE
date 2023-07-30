@@ -18,4 +18,9 @@ export const FormSchema = yup.object().shape({
     .string()
     .required("Confirm password is required")
     .oneOf([yup.ref("password")], "Password dont match"),
+  role: yup
+    .string()
+    .email("Must be a valid email address")
+    .required("Role is required")
+    .trim(),
 });
