@@ -1,0 +1,25 @@
+.not-authorized-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.not-authorized-content {
+  text-align: center;
+}
+
+.not-authorized-content h1 {
+  font-size: 3rem;
+  color: #ff4f54;
+}
+
+.not-authorized-content p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.not-authorized-image img {
+  max-width: 60%;
+  height: auto;
+}

@@ -1,0 +1,26 @@
+/* NotFound.css */
+.not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.not-found-content {
+  text-align: center;
+}
+
+.not-found-content h1 {
+  font-size: 3rem;
+  color: #ff4f54;
+}
+
+.not-found-content p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.not-found-image img {
+  max-width: 100%;
+  height: auto;
+}
