@@ -40,4 +40,4 @@ Project structure
    [FrontEnd](https://github.com/Shameera17/e-commerce-FE)
 2. installation -> npm install or yarn install
 3. run the app -> npm run dev or yarn dev
-4. Visit [Backend](https://github.com/Shameera17/e-commerce-BE) application
+4. Visit [Backend](https://github.com/Shameera17/e-commerce-BE) repository
