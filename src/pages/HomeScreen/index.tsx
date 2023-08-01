@@ -51,7 +51,9 @@ const HomeScreen = () => {
         <Grid container gap={"10px"}>
           {SearchText
             ? products
-                .filter((item) => item.name.includes(SearchText))
+                .filter((item) =>
+                  item.name.toLowerCase().includes(SearchText.toLowerCase()),
+                )
                 .map((product: any) => (
                   <Grid item margin={"10px"}>
                     <Product product={product} />
@@ -69,12 +71,17 @@ const HomeScreen = () => {
           container
           gap={"10px"}
           justifyContent={"center"}
+          alignContent={"center"}
           flexDirection={"column"}
         >
           {userInfo?.role === "seller" ? (
-            <Typography component={"h3"}>Add products to display</Typography>
+            <Typography textAlign={"center"} component={"h3"}>
+              Add products to display
+            </Typography>
           ) : (
-            <Typography component={"h3"}>No products to display</Typography>
+            <Typography textAlign={"center"} component={"h3"}>
+              No products to display
+            </Typography>
           )}
 
           <div>

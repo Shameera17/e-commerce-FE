@@ -1,4 +1,4 @@
-import { AccountBox, AddBox, ViewList } from "@mui/icons-material";
+import { AccountBox, AddBox } from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -46,21 +46,7 @@ const SideNavBarSeller = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
-
-        <ListItem key={2} disablePadding>
-          <ListItemButton
-            onClick={() => {
-              navigate("/seller/products");
-            }}
-          >
-            <ListItemIcon>
-              <ViewList />
-            </ListItemIcon>
-            <ListItemText primary={"View Products"} />
-          </ListItemButton>
-        </ListItem>
       </List>
-      <Divider />
     </Box>
   );
 };

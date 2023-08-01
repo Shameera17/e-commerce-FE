@@ -145,25 +145,33 @@ const SignUp: React.FC = () => {
               );
             }}
           />
-          <Typography component="p">Sign up as: </Typography>{" "}
-          <Controller
-            name="role"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup placeholder="Sign up as: " {...field} row>
-                <FormControlLabel
-                  value="buyer"
-                  control={<Radio />}
-                  label="Buyer"
-                />
-                <FormControlLabel
-                  value="seller"
-                  control={<Radio />}
-                  label="Seller"
-                />
-              </RadioGroup>
-            )}
-          />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography component="p">Sign up as: </Typography>{" "}
+            <Controller
+              name="role"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup placeholder="Sign up as: " {...field} row>
+                  <FormControlLabel
+                    value="buyer"
+                    control={<Radio />}
+                    label="Buyer"
+                  />
+                  <FormControlLabel
+                    value="seller"
+                    control={<Radio />}
+                    label="Seller"
+                  />
+                </RadioGroup>
+              )}
+            />
+          </div>
           <Button
             variant="contained"
             onClick={async () => {

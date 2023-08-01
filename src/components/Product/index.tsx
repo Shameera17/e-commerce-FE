@@ -35,39 +35,41 @@ const Product = ({ product }: { product: ICreatedProduct }) => {
           Remaining Quantity : {remainingQuantity}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          onClick={() => {
-            try {
-              if (userInfo && token) {
-                dispatch(
-                  setCartItem({
-                    name: name,
-                    quantity: 1,
-                    sellerId: product.sellerId,
-                    productId: product._id,
-                    imageFile: imageFile,
-                    price: price,
-                  }),
-                );
-              } else {
-                dispatch(manageModal());
+      {userInfo?.role === "buyer" && (
+        <CardActions>
+          <Button
+            onClick={() => {
+              try {
+                if (userInfo && token) {
+                  dispatch(
+                    setCartItem({
+                      name: name,
+                      quantity: 1,
+                      sellerId: product.sellerId,
+                      productId: product._id,
+                      imageFile: imageFile,
+                      price: price,
+                    }),
+                  );
+                } else {
+                  dispatch(manageModal());
+                }
+              } catch (error: any) {
+                enqueueSnackbar(error?.message || "Please try again!", {
+                  variant: "warning",
+                  anchorOrigin: {
+                    horizontal: "right",
+                    vertical: "top",
+                  },
+                });
               }
-            } catch (error: any) {
-              enqueueSnackbar(error?.message || "Please try again!", {
-                variant: "warning",
-                anchorOrigin: {
-                  horizontal: "right",
-                  vertical: "top",
-                },
-              });
-            }
-          }}
-          size="small"
-        >
-          Add to cart
-        </Button>
-      </CardActions>
+            }}
+            size="small"
+          >
+            Add to cart
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 };
