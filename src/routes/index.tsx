@@ -1,10 +1,10 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Route, Routes as RoutesWrap } from "react-router-dom";
 
-import BuyerLayout from "../components/BuyerLayout";
+import DashboardLayout from "../components/DashboardLayout";
 import Layout from "../components/Layout";
-import SellerLayout from "../components/SellerLayout";
 import Cart from "../pages/Buyer/Cart";
 import HomeScreen from "../pages/HomeScreen";
+import NotAuthorized from "../pages/NotAuthorized";
 import PageNotFound from "../pages/PageNotFound";
 import Profile from "../pages/Profile";
 import CreateProduct from "../pages/Seller/CreateProduct";
@@ -16,50 +16,29 @@ import BuyerRoute from "./BuyerRoute";
 import SellerRoute from "./SellerRoute";
 
 const Routes = () => {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      errorElement: <PageNotFound />,
-      children: [
-        { path: "/", element: <HomeScreen /> },
-        { path: "signin", element: <SignIn /> },
-        { path: "signup", element: <SignUp /> },
-        { path: "products", element: <ViewProducts /> },
-      ],
-    },
-    {
-      path: "/seller",
-      element: (
-        <SellerRoute>
-          <SellerLayout />
-        </SellerRoute>
-      ),
-      errorElement: <PageNotFound />,
-      children: [
-        { path: "createProduct", element: <CreateProduct /> },
-        { path: "products", element: <Products /> },
-        { path: "profile", element: <Profile /> },
-      ],
-    },
-    {
-      path: "/buyer",
-      element: (
-        <BuyerRoute>
-          <BuyerLayout />
-        </BuyerRoute>
-      ),
-      errorElement: <PageNotFound />,
-      children: [
-        { path: "cart", element: <Cart /> },
-        { path: "profile", element: <Profile /> },
-      ],
-    },
-  ]);
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+    <RoutesWrap>
+      <Route path="/" element={<Layout />} errorElement={<PageNotFound />}>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="products" element={<ViewProducts />} />
+        <Route path="NoAccess" element={<NotAuthorized />} />
+      </Route>
+      <Route path="/seller" element={<DashboardLayout />}>
+        <Route element={<SellerRoute />}>
+          <Route path="createproduct" element={<CreateProduct />} />
+          <Route path="products" element={<Products />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Route>
+      <Route path="/buyer" element={<DashboardLayout />}>
+        <Route element={<BuyerRoute />}>
+          <Route path="cart" element={<Cart />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Route>
+    </RoutesWrap>
   );
 };
 

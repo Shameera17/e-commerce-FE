@@ -1,5 +1,11 @@
+import PageHeading from "../../../components/PageHeading";
+
 const Products = () => {
-  return <div>Products</div>;
+  return (
+    <div>
+      <PageHeading heading=" View Products" />
+    </div>
+  );
 };
 
 export default Products;

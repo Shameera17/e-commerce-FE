@@ -1,19 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type IUserInfo = {
-  _id: string;
-  name: string;
-  email: string;
-  role: "seller" | "buyer";
-};
-interface IAuthReducer {
-  userInfo: IUserInfo | null;
-  token: null | string;
-}
+import { IAction, IAuthReducer, IUserInfo } from "../../types/interfaces";
+import { RootState } from "../store";
 
 const initialState: IAuthReducer = {
   userInfo: null,
-  token: null,
+  token: "",
+  action: {
+    type: null,
+    loading: false,
+  },
 };
 const authSlice = createSlice({
   name: "auth",
@@ -33,8 +29,22 @@ const authSlice = createSlice({
     clearToken(state) {
       state.token = null;
     },
+    updateAction(state, action: PayloadAction<IAction>) {
+      state.action = action.payload;
+    },
+    resetAction(state) {
+      state.action = initialState.action;
+    },
   },
 });
-export const { setCredentials, signout, setToken, clearToken } =
-  authSlice.actions;
+export const {
+  setCredentials,
+  signout,
+  setToken,
+  clearToken,
+  updateAction,
+  resetAction,
+} = authSlice.actions;
+
 export default authSlice.reducer;
+export const auth = (state: RootState) => state.auth;

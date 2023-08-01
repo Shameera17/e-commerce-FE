@@ -16,8 +16,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { RootState } from "../../store/configureStore";
-import { clearToken, signout } from "../../store/slices/auth.slice";
+import { clearToken, signout } from "../../redux/reducers/auth.reducer";
+import { RootState } from "../../redux/store";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -36,8 +36,10 @@ export default function MenuAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            onClick={() => {
+              navigate("/");
+              setAnchorEl(null);
+            }}
             sx={{
               mr: 2,
               display: "flex",
@@ -47,9 +49,10 @@ export default function MenuAppBar() {
               color: "inherit",
               textDecoration: "none",
               flexGrow: 1,
+              cursor: "pointer",
             }}
           >
-            LOGO
+            Shopify
           </Typography>
 
           {userInfo ? (

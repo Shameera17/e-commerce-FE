@@ -1,19 +1,17 @@
 import React from "react";
 
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-import NotAuthorized from "../pages/NotAuthorized";
-import { RootState } from "../store/configureStore";
+import { RootState } from "../redux/store";
 
-const SellerRoute: any = ({ children }: { children: React.ReactNode }) => {
+const SellerRoute: React.FC = () => {
   const { userInfo, token } = useSelector((state: RootState) => state.auth);
-  console.log(userInfo);
   return userInfo && userInfo?._id && token ? (
     userInfo.role === "seller" ? (
-      { children }
+      <Outlet />
     ) : (
-      <NotAuthorized />
+      <Navigate to="/NoAccess" />
     )
   ) : (
     <Navigate to="/signin" />

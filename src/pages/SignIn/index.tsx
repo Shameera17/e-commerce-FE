@@ -15,10 +15,13 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import SignInImage from "../../images/login.jpg";
-import { RootState } from "../../store/configureStore";
-import { setCredentials, setToken } from "../../store/slices/auth.slice";
-import { useLoginMutation } from "../../store/slices/usersApi.slice";
+import {
+  resetAction,
+  setCredentials,
+  setToken,
+} from "../../redux/reducers/auth.reducer";
+import { RootState } from "../../redux/store";
+import { login } from "../../services/authApi";
 import { FormSchema } from "./FormSchema";
 import "./styles.css";
 
@@ -33,9 +36,8 @@ const SignIn = () => {
     mode: "onChange",
   });
   const { enqueueSnackbar } = useSnackbar();
-  const [login, { isLoading }] = useLoginMutation();
-  // if user info available, then user has already logged in
-  const { userInfo } = useSelector((state: RootState) => state.auth);
+
+  const { userInfo, action } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     // navigate to home screen, when user sign in
@@ -43,30 +45,30 @@ const SignIn = () => {
   }, [navigate, userInfo]);
 
   const onSubmit = async (data: any) => {
-    try {
-      const res: any = await login(data).unwrap();
-      // Save the token in localStorage
-      dispatch(setCredentials({ ...res.data }));
-      // Save the token in Redux
-      dispatch(setToken({ token: res.token }));
-
-      navigate("/");
-    } catch (err: any) {
-      enqueueSnackbar(err?.data?.message || err?.error || err, {
-        variant: "warning",
-        anchorOrigin: {
-          horizontal: "right",
-          vertical: "top",
-        },
+    await login(data)
+      .then((res) => {
+        dispatch(setCredentials({ ...res.data }));
+        dispatch(setToken({ token: res.token }));
+      })
+      .then(() => {
+        dispatch(resetAction());
+        navigate("/");
+      })
+      .catch((err) => {
+        enqueueSnackbar(err?.data?.message || err?.error || err, {
+          variant: "warning",
+          anchorOrigin: {
+            horizontal: "right",
+            vertical: "top",
+          },
+        });
       });
-      console.log(err?.data.message || err.error);
-    }
   };
 
   return (
     <div className="signin-container">
       <div className="signin-image">
-        <img src={SignInImage} alt="Sign In" />
+        <img src={require("../../images/login.jpg")} alt="Sign In" />
       </div>
       <div className="signin-form-container">
         <h1>Sign In</h1>
@@ -118,7 +120,7 @@ const SignIn = () => {
           />
 
           <Button type="submit" variant="contained">
-            {isLoading ? (
+            {action.loading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
               `Sign In`

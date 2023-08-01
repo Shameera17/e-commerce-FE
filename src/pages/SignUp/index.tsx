@@ -12,21 +12,24 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
-// Replace with your actual image URL
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import SignUpImage from "../../images/signup.jpg";
-import { RootState } from "../../store/configureStore";
-import { setCredentials, setToken } from "../../store/slices/auth.slice";
-import { useRegisterMutation } from "../../store/slices/usersApi.slice";
+import {
+  resetAction,
+  setCredentials,
+  setToken,
+  updateAction,
+} from "../../redux/reducers/auth.reducer";
+import { RootState } from "../../redux/store";
+import { register } from "../../services/authApi";
 import { FormSchema } from "./FormSchema";
 import "./styles.css";
 
 // Import the CSS file for styling (see below)
 
 const SignUp: React.FC = () => {
-  const { userInfo } = useSelector((state: RootState) => state.auth);
+  const { userInfo, action } = useSelector((state: RootState) => state.auth);
   const { control, handleSubmit, getValues, trigger } = useForm({
     resolver: yupResolver(FormSchema),
     mode: "all",
@@ -42,27 +45,28 @@ const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [register, { isLoading }] = useRegisterMutation();
-
   const onSubmit = async (data: any) => {
-    try {
-      const res: any = await register(data).unwrap();
-      // Save the token in localStorage
-      dispatch(setCredentials({ ...res.data }));
-      // Save the token in Redux
-      dispatch(setToken({ token: res.token }));
-
-      navigate("/");
-    } catch (err: any) {
-      enqueueSnackbar(err?.data?.message || err?.error || err, {
-        variant: "warning",
-        anchorOrigin: {
-          horizontal: "right",
-          vertical: "top",
-        },
+    dispatch(updateAction({ type: "register", loading: true }));
+    register(data)
+      .then((response) => {
+        // Save the token in localStorage
+        dispatch(setCredentials({ ...response.data }));
+        // Save the token in Redux
+        dispatch(setToken({ token: response.token }));
+      })
+      .then(() => {
+        dispatch(resetAction());
+        navigate("/");
+      })
+      .catch((err) => {
+        enqueueSnackbar(err?.data?.message || err?.error || err, {
+          variant: "warning",
+          anchorOrigin: {
+            horizontal: "right",
+            vertical: "top",
+          },
+        });
       });
-      console.log(err?.data.message || err.error || err);
-    }
   };
 
   useEffect(() => {
@@ -72,7 +76,7 @@ const SignUp: React.FC = () => {
   return (
     <div className="signup-container">
       <div className="signup-image">
-        <img src={SignUpImage} alt="Sign Up" />
+        <img src={require("../../images/signup.jpg")} alt="Sign Up" />
       </div>
       <div className="signup-form-container">
         <h1>Sign Up</h1>
@@ -170,7 +174,7 @@ const SignUp: React.FC = () => {
               }
             }}
           >
-            {isLoading ? (
+            {action.type === "register" && action.loading ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
               `Sign Up`

@@ -1,10 +1,5 @@
 import React from "react";
 
-import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
-
-import MenuAppBar from "../AppBar";
-
 const BuyerLayout: React.FC = () => {
   return (
     <div
@@ -16,12 +11,7 @@ const BuyerLayout: React.FC = () => {
         flexDirection: "column",
         width: "100%",
       }}
-    >
-      <MenuAppBar />
-      <Box sx={{ height: "100%", width: "90%" }}>
-        <Outlet />
-      </Box>
-    </div>
+    ></div>
   );
 };
 
