@@ -50,7 +50,7 @@ const SideNavBarBuyer = () => {
         <ListItem key={2} disablePadding>
           <ListItemButton
             onClick={() => {
-              navigate("/buyer/orders");
+              navigate("/buyer/order");
             }}
           >
             <ListItemIcon>

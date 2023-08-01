@@ -13,10 +13,10 @@ import {
 import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
-  resetAction,
+  manageModal,
   setCredentials,
   setToken,
 } from "../../redux/reducers/auth.reducer";
@@ -31,6 +31,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(FormSchema),
     mode: "onChange",
@@ -51,8 +52,11 @@ const SignIn = () => {
         dispatch(setToken({ token: res.token }));
       })
       .then(() => {
-        dispatch(resetAction());
-        navigate("/");
+        if (location.pathname === "/") {
+          dispatch(manageModal());
+        } else {
+          navigate("/");
+        }
       })
       .catch((err) => {
         enqueueSnackbar(err?.response?.data?.message || err?.error || err, {

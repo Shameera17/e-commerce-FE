@@ -15,6 +15,7 @@ export interface IAuthReducer {
   userInfo: IUserInfo | null;
   token: null | string;
   action: IAction;
+  isModalVisible: boolean;
 }
 
 // product
@@ -41,8 +42,10 @@ export interface IProductReducer {
 export type ICartItem = {
   name: string;
   quantity: number;
-  sellerId?: string;
-  productId?: string;
+  sellerId: string;
+  productId: string;
+  price: number;
+  imageFile: string;
 };
 
 export type ICartAction = {

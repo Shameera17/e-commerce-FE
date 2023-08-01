@@ -10,6 +10,7 @@ const initialState: IAuthReducer = {
     type: null,
     loading: false,
   },
+  isModalVisible: false,
 };
 const authSlice = createSlice({
   name: "auth",
@@ -25,6 +26,9 @@ const authSlice = createSlice({
     setToken(state, action: PayloadAction<{ token: string }>) {
       localStorage.setItem("token", action.payload.token);
       state.token = action.payload.token;
+    },
+    manageModal(state) {
+      state.isModalVisible = !state.isModalVisible;
     },
     clearToken(state) {
       state.token = null;
@@ -44,6 +48,7 @@ export const {
   clearToken,
   updateAction,
   resetAction,
+  manageModal,
 } = authSlice.actions;
 
 export default authSlice.reducer;

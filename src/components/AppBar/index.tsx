@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { clearToken, signout } from "../../redux/reducers/auth.reducer";
 import { resetProducts } from "../../redux/reducers/product.reducer";
 import { RootState } from "../../redux/store";
+import CartBadge from "../CartBadge";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -121,6 +122,7 @@ export default function MenuAppBar() {
                   Sign Out
                 </MenuItem>
               </Menu>
+              {userInfo.role === "buyer" && <CartBadge />}
             </div>
           ) : (
             <>

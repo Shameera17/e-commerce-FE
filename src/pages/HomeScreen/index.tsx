@@ -4,6 +4,7 @@ import { Grid, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 import Product from "../../components/Product";
+import SignInPopUp from "../../components/SignInPopUp";
 import { setProducts } from "../../redux/reducers/product.reducer";
 import { RootState } from "../../redux/store";
 import {
@@ -46,7 +47,7 @@ const HomeScreen = () => {
         placeholder="Search by Title"
         onChange={(e) => setSearchText(e.target.value)}
       />
-      {products.length && (
+      {products.length > 0 && (
         <Grid container gap={"10px"}>
           {SearchText
             ? products
@@ -86,6 +87,7 @@ const HomeScreen = () => {
           </div>
         </Grid>
       )}
+      <SignInPopUp />
     </div>
   );
 };

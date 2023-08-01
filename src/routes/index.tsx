@@ -19,12 +19,13 @@ import SellerRoute from "./SellerRoute";
 const Routes = () => {
   return (
     <RoutesWrap>
-      <Route path="/" element={<Layout />} errorElement={<PageNotFound />}>
+      <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomeScreen />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="products" element={<ViewProducts />} />
         <Route path="NoAccess" element={<NotAuthorized />} />
+        <Route path="*" element={<PageNotFound />} />
       </Route>
       <Route path="/seller" element={<DashboardLayout />}>
         <Route element={<SellerRoute />}>

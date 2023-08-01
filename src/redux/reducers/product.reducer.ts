@@ -18,7 +18,6 @@ const productSlice = createSlice({
     setProduct: (state, action: PayloadAction<IProduct>) => {
       state.productInfo = action.payload;
     },
-
     setProducts: (state, action: PayloadAction<IProduct[]>) => {
       state.products = action.payload;
     },

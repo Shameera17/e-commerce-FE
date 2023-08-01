@@ -19,13 +19,13 @@ const cartSlice = createSlice({
       const index = state.cartItems.findIndex(
         (item) => item.productId === action.payload.productId,
       );
-      if (!index) {
+      if (index < 0) {
         // if item not added, then add to the list
         state.cartItems = [...state.cartItems, action.payload];
       } else {
+        const count = state.cartItems[index].quantity + action.payload.quantity;
         // if item available, increment by quantity
-        state.cartItems[index].quantity =
-          state.cartItems[index].quantity + action.payload.quantity;
+        state.cartItems[index].quantity = count;
       }
     },
     removeCartItem: (state, action: PayloadAction<{ productId: string }>) => {

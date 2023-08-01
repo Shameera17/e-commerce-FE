@@ -1,5 +1,12 @@
+import PageHeading from "../../../components/PageHeading";
+
 const Order = () => {
-  return <div>Order</div>;
+  return (
+    <div>
+      {" "}
+      <PageHeading heading="View Orders" />
+    </div>
+  );
 };
 
 export default Order;
