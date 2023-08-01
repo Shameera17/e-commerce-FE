@@ -3,6 +3,7 @@ import { Route, Routes as RoutesWrap } from "react-router-dom";
 import DashboardLayout from "../components/DashboardLayout";
 import Layout from "../components/Layout";
 import Cart from "../pages/Buyer/Cart";
+import Order from "../pages/Buyer/Orders";
 import HomeScreen from "../pages/HomeScreen";
 import NotAuthorized from "../pages/NotAuthorized";
 import PageNotFound from "../pages/PageNotFound";
@@ -36,6 +37,7 @@ const Routes = () => {
         <Route element={<BuyerRoute />}>
           <Route path="cart" element={<Cart />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="order" element={<Order />} />
         </Route>
       </Route>
     </RoutesWrap>

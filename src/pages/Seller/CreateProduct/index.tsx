@@ -1,19 +1,26 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, CardMedia, Grid, TextField } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 import PageHeading from "../../../components/PageHeading";
+import { RootState } from "../../../redux/store";
+import { createProduct } from "../../../services/product.Api";
 import imageProcess from "../../../utils/imageProcess";
 import { FormSchema } from "./FormSchema";
 
 const CreateProduct = () => {
+  const { token, userInfo } = useSelector((state: RootState) => state.auth);
+  const { enqueueSnackbar } = useSnackbar();
+  const fileInputRef = useRef(null);
   const [product, setProduct] = useState({
     file: "",
     flag: false,
   });
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit, setValue, reset } = useForm({
     resolver: yupResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
@@ -25,10 +32,44 @@ const CreateProduct = () => {
   const handleFileUpload = async (e: any) => {
     const file = e.target.files[0];
     const base64: any = await imageProcess(file);
+
     setProduct({ ...product, flag: true, file: base64 });
   };
 
-  const onSubmit = (data: any) => {};
+  const onSubmit = (data: any) => {
+    const dataObj = {
+      ...data,
+      imageFile: product.file,
+      sellerId: userInfo?._id,
+    };
+    if (!product.file) {
+    } else {
+      createProduct(dataObj, token!)
+        .then((response) => {
+          enqueueSnackbar("Success", {
+            variant: "success",
+            anchorOrigin: {
+              horizontal: "right",
+              vertical: "top",
+            },
+          });
+          reset();
+          setProduct({ file: "", flag: false });
+          if (fileInputRef.current) {
+            fileInputRef.current = null; // Reset the file input value to clear the selection
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(err?.response?.data?.message || err, {
+            variant: "warning",
+            anchorOrigin: {
+              horizontal: "right",
+              vertical: "top",
+            },
+          });
+        });
+    }
+  };
 
   return (
     <>
@@ -119,6 +160,7 @@ const CreateProduct = () => {
               size="small"
               label="Image File"
               type="file"
+              ref={fileInputRef}
               inputProps={{
                 accept: "image/*", // This will only accept image files
               }}

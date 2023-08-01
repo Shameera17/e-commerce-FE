@@ -11,7 +11,7 @@ function App() {
     <Provider store={store}>
       <SnackbarProvider maxSnack={3} autoHideDuration={2000}>
         <BrowserRouter>
-          <div className="App">
+          <div>
             <Routes />
           </div>
         </BrowserRouter>

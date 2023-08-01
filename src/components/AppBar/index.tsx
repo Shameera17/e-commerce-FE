@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { clearToken, signout } from "../../redux/reducers/auth.reducer";
+import { resetProducts } from "../../redux/reducers/product.reducer";
 import { RootState } from "../../redux/store";
 
 export default function MenuAppBar() {
@@ -30,7 +31,7 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
-      <AppBar position="sticky">
+      <AppBar position="relative">
         <Toolbar disableGutters sx={{ padding: "0 40px" }}>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
@@ -109,6 +110,7 @@ export default function MenuAppBar() {
                     // Clear the token from Redux and localStorage
                     dispatch(clearToken());
                     localStorage.removeItem("token");
+                    dispatch(resetProducts());
 
                     navigate("/");
                   }}
@@ -123,16 +125,26 @@ export default function MenuAppBar() {
           ) : (
             <>
               <Button
-                variant="contained"
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                  borderColor: "black",
+                }}
+                variant="outlined"
                 onClick={() => navigate("/signin")}
-                color="primary"
               >
                 Sign In
               </Button>
               <Button
-                variant="contained"
+                style={{
+                  backgroundColor: "white",
+                  fontWeight: "bold",
+                  borderColor: "#1976d2",
+                }}
+                variant="outlined"
                 onClick={() => navigate("/signup")}
-                color="secondary"
               >
                 Sign Up
               </Button>

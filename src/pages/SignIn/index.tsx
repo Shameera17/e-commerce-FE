@@ -55,7 +55,7 @@ const SignIn = () => {
         navigate("/");
       })
       .catch((err) => {
-        enqueueSnackbar(err?.data?.message || err?.error || err, {
+        enqueueSnackbar(err?.response?.data?.message || err?.error || err, {
           variant: "warning",
           anchorOrigin: {
             horizontal: "right",

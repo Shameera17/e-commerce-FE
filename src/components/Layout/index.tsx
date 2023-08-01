@@ -18,7 +18,7 @@ const Layout: React.FC = () => {
       }}
     >
       <MenuAppBar />
-      <Box sx={{ height: "100%", width: "90%" }}>
+      <Box sx={{ height: "90%", width: "90%" }}>
         <Outlet />
       </Box>
     </div>

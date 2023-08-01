@@ -55,3 +55,17 @@ export interface ICartReducer {
   action: ICartAction;
   cartItems: ICartItem[] | [];
 }
+
+export interface ICreatedProduct {
+  _id: string;
+  name: string;
+  originalQuantity: number;
+  remainingQuantity: number;
+  price: number;
+  sellerId: string;
+  imageFile: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

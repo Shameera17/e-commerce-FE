@@ -40,28 +40,6 @@ const Profile = () => {
     },
   });
 
-  const onSubmit = async (data: any) => {
-    token &&
-      updateUser(data, token)
-        .then((response) => {
-          // Save the token in localStorage
-          dispatch(setCredentials({ ...response.data }));
-          // Save the token in Redux
-          dispatch(setToken({ token: response.token }));
-
-          navigate("/");
-        })
-        .catch((err) => {
-          enqueueSnackbar(err?.data?.message || err?.error || err, {
-            variant: "warning",
-            anchorOrigin: {
-              horizontal: "right",
-              vertical: "top",
-            },
-          });
-        });
-  };
-
   return (
     <>
       <PageHeading heading="Profile" />
@@ -146,15 +124,32 @@ const Profile = () => {
           value={userInfo?.role === "buyer" ? "Buyer" : "Seller"}
         />
         <Button
+          type="submit"
           style={{
             width: "100px",
           }}
           variant="contained"
           onClick={async () => {
             const validated = await trigger();
-            if (!validated) {
+            console.log(validated);
+            if (validated && token) {
               const values = getValues();
-              onSubmit(values!);
+              updateUser(values, token)
+                .then((response) => {
+                  // Save the token in localStorage
+                  dispatch(setCredentials({ ...response.updatedUser }));
+                  // Save the token in Redux
+                  dispatch(setToken({ token: response.token }));
+                })
+                .catch((err) => {
+                  enqueueSnackbar(err?.data?.message || err?.error || err, {
+                    variant: "warning",
+                    anchorOrigin: {
+                      horizontal: "right",
+                      vertical: "top",
+                    },
+                  });
+                });
             }
           }}
         >

@@ -23,7 +23,9 @@ const productSlice = createSlice({
       state.products = action.payload;
     },
     resetProducts: (state) => {
-      state = initialState;
+      state.action = initialState.action;
+      state.productInfo = initialState.productInfo;
+      state.products = initialState.products;
     },
     resetAction(state) {
       state.action = initialState.action;

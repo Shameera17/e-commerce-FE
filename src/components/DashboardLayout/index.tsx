@@ -1,12 +1,17 @@
 import React from "react";
 
 import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
+import { RootState } from "../../redux/store";
 import MenuAppBar from "../AppBar";
+import SideNavBarBuyer from "../SideNavBarBuyer";
 import SideNavBarSeller from "../SideNavBarSeller";
 
 const DashboardLayout: React.FC = () => {
+  const { userInfo } = useSelector((state: RootState) => state.auth);
+
   return (
     <div
       style={{
@@ -25,7 +30,11 @@ const DashboardLayout: React.FC = () => {
           overflowY: "auto",
         }}
       >
-        <SideNavBarSeller />
+        {userInfo?.role === "seller" ? (
+          <SideNavBarSeller />
+        ) : (
+          <SideNavBarBuyer />
+        )}
         <div style={{ width: "100%", padding: "30px" }}>
           <Box
             sx={{
