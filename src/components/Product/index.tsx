@@ -18,9 +18,9 @@ const Product = ({ product }: { product: ICreatedProduct }) => {
   const dispatch = useDispatch();
   const { name, price, imageFile, remainingQuantity } = product;
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: 250 }}>
       <CardMedia
-        sx={{ height: 140, objectFit: "fill" }}
+        sx={{ height: 140, objectFit: "contain", marginY: "10px" }}
         component={"img"}
         src={imageFile}
       />
