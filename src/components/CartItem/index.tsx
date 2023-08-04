@@ -21,11 +21,18 @@ const CartItem = ({ cart }: { cart: ICartItem }) => {
         display: "flex",
         border: "1px solid #D3D3D3",
         justifyContent: "space-between",
+        paddingX: "10px",
       }}
     >
       {/* image */}
       <CardMedia
-        sx={{ height: 140, width: 120, objectFit: "contain" }}
+        sx={{
+          height: 140,
+          width: 120,
+          objectFit: "contain",
+          border: "1px solid #D3D3D3",
+          marginY: "10px",
+        }}
         component={"img"}
         src={imageFile}
       />
