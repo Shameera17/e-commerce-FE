@@ -25,7 +25,7 @@ const CartItem = ({ cart }: { cart: ICartItem }) => {
     >
       {/* image */}
       <CardMedia
-        sx={{ height: 140, width: 120, objectFit: "fill" }}
+        sx={{ height: 140, width: 120, objectFit: "contain" }}
         component={"img"}
         src={imageFile}
       />
