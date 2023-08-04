@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { decodeToken } from "react-jwt";
 
 import { IAction, IAuthReducer, IUserInfo } from "../../types/interfaces";
 import { RootState } from "../store";
@@ -39,6 +40,16 @@ const authSlice = createSlice({
     resetAction(state) {
       state.action = initialState.action;
     },
+    refreshAuthToken(state) {
+      if (!state.userInfo && !state.token) {
+        const token = localStorage.getItem("token");
+        const decodedToken = decodeToken(token!);
+        // // Verify the token and extract the payload (user data) if valid
+        // const decoded: any = Jwt.verify(token!, secretKey!);
+        state.userInfo = decodedToken as any;
+        state.token = token;
+      }
+    },
   },
 });
 export const {
@@ -49,6 +60,7 @@ export const {
   updateAction,
   resetAction,
   manageModal,
+  refreshAuthToken,
 } = authSlice.actions;
 
 export default authSlice.reducer;

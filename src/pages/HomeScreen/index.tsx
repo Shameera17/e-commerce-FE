@@ -3,9 +3,14 @@ import { useEffect, useState } from "react";
 import { Grid, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
+import Loading from "../../components/Loading";
 import Product from "../../components/Product";
 import SignInPopUp from "../../components/SignInPopUp";
-import { setProducts } from "../../redux/reducers/product.reducer";
+import {
+  resetAction,
+  setAction,
+  setProducts,
+} from "../../redux/reducers/product.reducer";
 import { RootState } from "../../redux/store";
 import {
   getAllProductsByStatus,
@@ -17,18 +22,29 @@ const HomeScreen = () => {
   const { userInfo, token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [SearchText, setSearchText] = useState("");
+
   useEffect(() => {
-    // if role === seller, only shoe seller's products
-    if (userInfo?.role === "seller" || action.loading) {
-      getAllProductsByStatusBySellerId(token!).then((response) => {
-        dispatch(setProducts(response.products));
-      });
-    } else {
-      getAllProductsByStatus().then((response) => {
-        dispatch(setProducts(response.products));
-      });
+    dispatch(setAction({ loading: true, type: "fetchAll" }));
+  }, []);
+
+  useEffect(() => {
+    if (action.loading || action.type !== null) {
+      // if role === seller, only show seller's products
+      if (userInfo?.role === "seller") {
+        getAllProductsByStatusBySellerId(token!).then(async (response) => {
+          dispatch(resetAction());
+
+          dispatch(setProducts(response.products));
+        });
+      } else {
+        getAllProductsByStatus().then(async (response) => {
+          dispatch(resetAction());
+
+          dispatch(setProducts(response.products));
+        });
+      }
     }
-  }, [action.loading, userInfo?.role]);
+  }, [action.loading, action.type, userInfo?.role]);
 
   return (
     <div
@@ -66,7 +82,9 @@ const HomeScreen = () => {
               ))}
         </Grid>
       )}
-      {!products.length && (
+      {action.loading ? (
+        <Loading />
+      ) : products.length < 1 && !action.loading ? (
         <Grid
           container
           gap={"10px"}
@@ -93,7 +111,7 @@ const HomeScreen = () => {
             />
           </div>
         </Grid>
-      )}
+      ) : undefined}
       <SignInPopUp />
     </div>
   );

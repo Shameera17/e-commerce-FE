@@ -1,6 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { IProduct, IProductReducer } from "../../types/interfaces";
+import {
+  IProduct,
+  IProductAction,
+  IProductReducer,
+} from "../../types/interfaces";
 import { RootState } from "../store";
 
 const initialState: IProductReducer = {
@@ -26,13 +30,21 @@ const productSlice = createSlice({
       state.productInfo = initialState.productInfo;
       state.products = initialState.products;
     },
+    setAction(state, action: PayloadAction<IProductAction>) {
+      state.action = action.payload;
+    },
     resetAction(state) {
       state.action = initialState.action;
     },
   },
 });
-export const { setProduct, setProducts, resetAction, resetProducts } =
-  productSlice.actions;
+export const {
+  setProduct,
+  setProducts,
+  resetAction,
+  resetProducts,
+  setAction,
+} = productSlice.actions;
 
 export default productSlice.reducer;
 export const product = (state: RootState) => state.product;

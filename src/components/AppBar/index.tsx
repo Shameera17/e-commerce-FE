@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { AccountCircle, Login, Logout } from "@mui/icons-material";
+import { AccountCircle, Dashboard, Home, Logout } from "@mui/icons-material";
 import AdbIcon from "@mui/icons-material/Adb";
 import {
   AppBar,
@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { clearToken, signout } from "../../redux/reducers/auth.reducer";
 import { resetProducts } from "../../redux/reducers/product.reducer";
@@ -24,6 +24,7 @@ import CartBadge from "../CartBadge";
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -94,14 +95,29 @@ export default function MenuAppBar() {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate(`${userInfo.role}/profile`);
-                    setAnchorEl(null);
+                    if (
+                      location.pathname.includes("buyer") ||
+                      location.pathname.includes("seller")
+                    ) {
+                      navigate(`/`);
+                    } else {
+                      navigate(`${userInfo.role}/profile`);
+                      setAnchorEl(null);
+                    }
                   }}
                 >
                   <ListItemIcon>
-                    <Login fontSize="small" />
+                    {location.pathname.includes("buyer") ||
+                    location.pathname.includes("seller") ? (
+                      <Home fontSize="small" />
+                    ) : (
+                      <Dashboard fontSize="small" />
+                    )}
                   </ListItemIcon>
-                  Dashbord
+                  {location.pathname.includes("buyer") ||
+                  location.pathname.includes("seller")
+                    ? "Home"
+                    : "Dashbord"}
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

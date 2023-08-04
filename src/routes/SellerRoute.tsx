@@ -1,20 +1,18 @@
-import React from "react";
-
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
+import NotAuthorized from "../pages/NotAuthorized";
 import { RootState } from "../redux/store";
 
 const SellerRoute: React.FC = () => {
-  const { userInfo, token } = useSelector((state: RootState) => state.auth);
-  return userInfo && userInfo?._id && token ? (
-    userInfo.role === "seller" ? (
-      <Outlet />
-    ) : (
-      <Navigate to="/NoAccess" />
-    )
+  const auth = useSelector((state: RootState) => state.auth);
+
+  return auth.userInfo && auth?.userInfo.role === "seller" ? (
+    <Outlet />
+  ) : auth?.userInfo?.email ? (
+    <NotAuthorized />
   ) : (
-    <Navigate to="/signin" />
+    <Navigate to={"/signin"} />
   );
 };
 

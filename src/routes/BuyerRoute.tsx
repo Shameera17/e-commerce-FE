@@ -7,14 +7,12 @@ import { RootState } from "../redux/store";
 const BuyerRoute: React.FC = () => {
   const auth = useSelector((state: RootState) => state.auth);
 
-  return auth && auth?.userInfo?._id && auth?.token ? (
-    auth?.userInfo.role === "buyer" ? (
-      <Outlet />
-    ) : (
-      <NotAuthorized />
-    )
+  return auth.userInfo && auth?.userInfo.role === "buyer" ? (
+    <Outlet />
+  ) : auth?.userInfo?.email ? (
+    <NotAuthorized />
   ) : (
-    <Navigate to="/signin" />
+    <Navigate to={"/signin"} />
   );
 };
 
